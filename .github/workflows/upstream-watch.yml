@@ -1,0 +1,32 @@
+name: Close issue when upstream resolves
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch: # manual trigger for testing
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check upstream and close if resolved
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if our issue is already closed (no-op)
+          LOCAL=$(gh api repos/${{ github.repository }}/issues/1 --jq '.state')
+          if [ "$LOCAL" = "closed" ]; then
+            echo "Local issue already closed — nothing to do"
+            exit 0
+          fi
+
+          # Check upstream issue state
+          UPSTREAM=$(gh api repos/openclaw/clawhub/issues/751 --jq '.state')
+          echo "Upstream openclaw/clawhub#751 is: $UPSTREAM"
+
+          if [ "$UPSTREAM" = "closed" ]; then
+            gh issue close 1 \
+              --repo ${{ github.repository }} \
+              --comment "Upstream [openclaw/clawhub#751](https://github.com/openclaw/clawhub/issues/751) has been resolved. Closing."
+            echo "Closed issue #1"
+          fi
