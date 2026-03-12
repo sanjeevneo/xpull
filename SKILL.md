@@ -22,6 +22,8 @@ metadata:
 - `node {baseDir}/scripts/grok-x-search.mjs search "<query>"` — search (requires XAI_API_KEY)
 - `node {baseDir}/scripts/grok-x-search.mjs search "<query>" --from <handle>` — search by author (requires XAI_API_KEY)
 
+All Grok commands accept optional `--images` (analyse images in posts) and `--video` (analyse videos in posts). Off by default — adds token cost when enabled.
+
 ## Configuration
 
 | Variable | Required | Default | Description |

@@ -5,7 +5,7 @@
  * Usage:
  *   grok-x-search.mjs thread <url>
  *   grok-x-search.mjs replies <url>
- *   grok-x-search.mjs search <query> [--from handle]
+ *   grok-x-search.mjs search <query> [--from handle] [--images] [--video]
  *
  * Requires XAI_API_KEY in env or .env in current directory.
  * Daily cap: 20 calls (override: GROK_DAILY_CAP).
@@ -63,7 +63,7 @@ const PROMPTS = {
 };
 
 const [cmd, target, ...rest] = process.argv.slice(2);
-if (!cmd || !target || !PROMPTS[cmd]) { console.error('Usage: grok-x-search.mjs <thread|replies|search> <url-or-query> [--from handle]'); process.exit(1); }
+if (!cmd || !target || !PROMPTS[cmd]) { console.error('Usage: grok-x-search.mjs <thread|replies|search> <url-or-query> [--from handle] [--images] [--video]'); process.exit(1); }
 const key = getKey();
 if (!key) { console.error('XAI_API_KEY not set. Export it or place it in a .env file in the current directory. Get one at https://console.x.ai'); process.exit(1); }
 
@@ -71,6 +71,8 @@ try {
   checkBudget();
   const fromIdx = rest.indexOf('--from');
   const toolParams = fromIdx !== -1 && rest[fromIdx + 1] ? { allowed_x_handles: [rest[fromIdx + 1].replace('@', '')] } : {};
+  if (rest.includes('--images')) toolParams.enable_image_understanding = true;
+  if (rest.includes('--video')) toolParams.enable_video_understanding = true;
   const resp = await post(key, PROMPTS[cmd](target), toolParams);
   console.log(JSON.stringify(resp, null, 2));
 } catch (e) { console.error(`Error: ${e.message}`); process.exit(1); }

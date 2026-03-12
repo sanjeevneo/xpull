@@ -59,6 +59,14 @@ node scripts/grok-x-search.mjs search "transformer architecture"
 node scripts/grok-x-search.mjs search "AI safety" --from elonmusk
 ```
 
+### Media understanding (optional)
+
+Add `--images` or `--video` to any Grok command to analyse media in posts. Off by default — adds token cost.
+
+```bash
+node scripts/grok-x-search.mjs search "infographic" --images
+```
+
 ## Output
 
 Raw [FxTwitter](https://github.com/FxEmbed/FxEmbed) tweet objects as a JSON array:
