@@ -1,6 +1,6 @@
 # xpull
 
-Pull tweets, threads, and articles from X/Twitter without login or API keys.
+Pull tweets, threads, and articles from X/Twitter without login or API keys (advanced features).
 
 ```bash
 node scripts/fx-fetch.mjs "https://x.com/naval/status/1002103360646823936"
